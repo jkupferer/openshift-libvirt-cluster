@@ -1,0 +1,9 @@
+- hosts: masters[0]
+  tasks:
+  - shell: |
+      pwd
+      find . -ls
+    register: look_about
+
+  - debug:
+      msg: look_about.stdout
