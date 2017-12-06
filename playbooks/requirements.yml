@@ -1,0 +1,3 @@
+- src: https://github.com/gnuthought/ansible-role-openshift-provision.git
+  version: master
+  name: openshift-provision
