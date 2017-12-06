@@ -3,7 +3,8 @@
   - shell: |
       pwd
       find . -ls
+    delegate_to: localhost
     register: look_about
 
   - debug:
-      msg: look_about.stdout
+      var: look_about.stdout
