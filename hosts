@@ -1,0 +1,57 @@
+[OSEv3:vars]
+# This variable configures the subnet in which services will be created within
+# the OpenShift Origin SDN. This network block should be private and must
+# not conflict with any existing network blocks in your infrastructure to
+# which pods, nodes, or the master may require access to, or the installation
+# will fail. Defaults to 172.30.0.0/16, and cannot be re-configured after
+# deployment.
+openshift_portal_net=100.78.0.0/19
+
+# This variable overrides the SDN cluster network CIDR block. This is
+# the network from which pod IPs are assigned. This network block should
+# be a private block and must not conflict with existing network blocks
+# in your infrastructure to which pods, nodes, or the master may require
+# access.
+osm_cluster_network_cidr=100.64.0.0/16
+
+#openshift_master_logging_public_url=https://kibana.openshift.libvirt
+#openshift_hosted_metrics_public_url=hawkular-metrics.openshift.libvirt
+openshift_master_default_subdomain=openshift.libvirt
+#openshift_hosted_registry_storage_kind=glusterfs
+
+openshift_master_cluster_public_hostname=openshift-master.libvirt
+
+# Disable memory and disk checks
+openshift_disable_check=disk_availability,memory_availability
+
+#my_openshift_default_storageclass=glusterfs-storage
+
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+etcd
+
+# host group for masters
+[masters]
+openshift-master.libvirt
+
+[etcd:children]
+masters
+
+[nodes:children]
+masters
+appnodes
+infranodes
+
+#[glusterfs_registry:children]
+#[glusterfs:children]
+#appnodes
+#infranodes
+
+[appnodes]
+openshift-node-0.libvirt
+#openshift-node-1.libvirt
+
+[infranodes]
+openshift-infra.libvirt

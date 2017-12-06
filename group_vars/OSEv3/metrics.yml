@@ -1,0 +1,28 @@
+## Deploy cluster metrics. A task during the configuration run will detect if
+## metrics is already deployed and set this value to false if so.
+#openshift_hosted_metrics_deploy: true
+#
+## Set desired number of cassandra instances
+#openshift_metrics_cassandra_replicas: 1
+#
+## Tthe hosted metrics public url is set directly in the hosts file as the
+## below variable substitution has proven to be unreliable.
+## openshift_hosted_metrics_public_url: hawkular-metrics.{{ openshift_master_default_subdomain }}
+#
+## Node selectors for metrics components
+#openshift_metrics_cassandra_nodeselector:
+#  region: infra
+#openshift_metrics_hawkular_nodeselector:
+#  region: infra
+#openshift_metrics_heapster_nodeselector:
+#  region: infra
+#
+## Use hostmount for cassandra storage.
+## These variables are implemented after initial installation using the role
+## openshift-metrics-cassandra-hostmount
+#openshift_metrics_cassandra_hostmount_path: /opt/openshift-hostmount/cassandra
+#openshift_metrics_cassandra_hostmount_path_owner: 987
+#openshift_metrics_cassandra_hostmount_path_group: 987
+#openshift_metrics_cassandra_hostmount_path_mode: u=rwx,g=rwx,o=
+#openshift_metrics_cassandra_uid: 987
+#openshift_metrics_cassandra_gid: 987

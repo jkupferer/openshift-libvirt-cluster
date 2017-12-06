@@ -1,0 +1,6 @@
+---
+- hosts: nodes
+  vars_files:
+  - ../vars/redhat_subscription.yml
+  roles:
+  - node-prep

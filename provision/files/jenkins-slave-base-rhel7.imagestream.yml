@@ -1,0 +1,17 @@
+action: create
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  name: jenkins-slave-base-rhel7
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - from:
+      kind: DockerImage
+      name: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source

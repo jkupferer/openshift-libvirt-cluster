@@ -1,0 +1,6 @@
+openshift_node_labels:
+  region: infra
+  fluentd: enable
+glusterfs_devices:
+- /dev/vdc
+docker_storage: /dev/vdb

@@ -1,0 +1,28 @@
+#openshift_hosted_logging_deploy: true
+#
+## Node selectors
+#openshift_logging_curator_nodeselector:
+#  region: infra
+#openshift_logging_es_nodeselector:
+#  region: infra
+#openshift_logging_kibana_nodeselector:
+#  region: infra
+#
+#openshift_logging_elasticsearch_memory_limit: 1Gi
+#
+#  
+##openshift_hosted_logging_fluentd_nodeselector:
+##  fluentd: enable
+#
+## Number of elasticsearch nodes
+#openshift_hosted_logging_elasticsearch_cluster_size: 1
+#
+## Use hostmount for elasticsearh storage.
+## These variables are implemented after initial installation using the role
+## openshift-logging-elasticsearch-hostmount
+#openshift_hosted_logging_elasticsearch_hostmount_path: /opt/openshift-hostmount/elasticsearch
+#openshift_hosted_logging_elasticsearch_hostmount_path_owner: 986
+#openshift_hosted_logging_elasticsearch_hostmount_path_group: 986
+#openshift_hosted_logging_elasticsearch_hostmount_path_mode: u=rwx,g=rwx,o=
+#openshift_hosted_logging_elasticsearch_uid: 986
+#openshift_hosted_logging_elasticsearch_gid: 986

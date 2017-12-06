@@ -1,0 +1,15 @@
+# htpasswd auth
+openshift_master_identity_providers:
+- name: htpasswd_auth
+  login: true
+  challenge: true
+  kind: HTPasswdPasswordIdentityProvider
+  filename: /etc/origin/master/htpasswd
+
+# Defining htpasswd users
+openshift_master_htpasswd_users:
+  alice: "$apr1$qgCoSsC5$v5fSYIiuAUEFaZbJbYgaW0"
+  jtk: "$apr1$vSV08lqv$AF3gjLjP1fPHDDvvGhkQb/"
+  userone: "$apr1$tXV6nUUZ$j7mPignaelu0WbUUPTRJz0"
+# or
+#openshift_master_htpasswd_file: files/htpasswd

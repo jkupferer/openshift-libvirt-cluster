@@ -1,0 +1,19 @@
+---
+- name: Elasticsearch scripts directory
+  file:
+    path: "{{ openshift_hosted_logging_elasticsearch_hostmount_path }}/scripts/"
+    state: directory
+    owner: "{{ openshift_hosted_logging_elasticsearch_hostmount_path_owner }}"
+    group: "{{ openshift_hosted_logging_elasticsearch_hostmount_path_group }}"
+
+- name: Elasticsearch scripts
+  copy:
+    src: "{{ role_path }}/files/es-scripts/"
+    dest: "{{ openshift_hosted_logging_elasticsearch_hostmount_path }}/scripts/"
+    mode: u=rwx,g=rx,o=rx
+    owner: elasticsearch
+    group: root
+  delegate_to: "{{ esnode }}"
+  with_items: "{{ groups['elasticsearch'] }}"
+  loop_control:
+    loop_var: esnode

@@ -1,0 +1,4 @@
+openshift_schedulable: False
+openshift_node_labels:
+  region: master
+docker_storage: /dev/vdb

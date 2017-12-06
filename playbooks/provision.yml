@@ -1,0 +1,7 @@
+- hosts: masters[0]
+  roles:
+  # Provision cluster base configuration
+  - role: openshift-provision
+    openshift_resource_definition: "{{ inventory_dir }}/provision/base.yml"
+
+

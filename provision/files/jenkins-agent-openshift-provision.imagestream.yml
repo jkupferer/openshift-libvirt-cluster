@@ -1,0 +1,9 @@
+action: create
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  name: jenkins-agent-ansible-openshift-provision
+spec:
+  lookupPolicy:
+    local: false

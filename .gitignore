@@ -1,0 +1,3 @@
+*.retry
+*.swp
+vars/redhat_subscription.yml

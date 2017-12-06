@@ -1,0 +1,6 @@
+- hosts: nodes
+  tasks:
+  - name: Apply all yum updates
+    yum:
+      name: '*'
+      state: latest

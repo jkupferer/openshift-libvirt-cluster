@@ -1,0 +1,90 @@
+---
+# tasks file for node-prep
+- name: Register nodes with subscription-manager
+  redhat_subscription:
+    username: "{{ redhat_subscription_username }}"
+    password: "{{ redhat_subscription_password }}"
+    pool_ids: "{{ redhat_subscription_pools }}"
+  register: redhat_subscribe_system
+
+- name: Set yum repositories
+  command: >-
+    subscription-manager repos
+    --disable='*'
+    --enable=rhel-7-server-extras-rpms
+    --enable=rhel-7-server-ose-3.6-rpms
+    --enable=rhel-7-server-rpms
+    --enable=rhel-7-server-optional-rpms
+    --enable=rhel-7-fast-datapath-rpms
+  when: redhat_subscribe_system.changed
+
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - docker
+  - firewalld
+
+- name: Configure docker storage configuration
+  lineinfile:
+    path: /etc/sysconfig/docker-storage-setup
+    line: "{{ item.key }}={{ item.value }}"
+    regexp: '^{{ item.key }}='
+  with_dict:
+    DEVS: "{{ docker_storage }}"
+    VG: dockervg
+
+- name: Check docker storage setup volume group
+  command: vgdisplay dockervg
+  register: check_dockervg
+  failed_when: false
+  changed_when: false
+
+- name: Run docker-storage-setup
+  command: docker-storage-setup
+  when: check_dockervg.rc != 0
+
+- name: Start and enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+  - docker
+  - firewalld
+
+- name: Create router healthcheck service for firewalld
+  copy:
+    src: firewalld-haproxy-healthcheck-service.xml
+    dest: /etc/firewalld/services/haproxy-healthcheck.xml
+  register: create_healthcheck_service
+  when: "'infranodes' in group_names"
+   
+# Warning, if cluster is already installed and running this reload is
+# dangerous
+- name: Reload firewalld
+  command: firewall-cmd --reload
+  when: create_healthcheck_service.changed
+
+- firewalld:
+    zone: public
+    service: haproxy-healthcheck
+    permanent: true
+    state: enabled
+  when: "'infranodes' in group_names"
+
+- name: Create hostmount directory
+  file:
+    path: /opt/openshift-hostmount/
+    state: directory
+    owner: root
+    group: root
+    mode: u=rwx,go=rx
+    setype: svirt_sandbox_file_t
+
+- name: SELinux fcontext for hostmount directory
+  sefcontext:
+    target: '/opt/openshift-hostmount(/.*)?'
+    setype: svirt_sandbox_file_t
+    state: present

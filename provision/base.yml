@@ -1,0 +1,55 @@
+openshift_clusters:
+- cluster_role_bindings:
+  - role: cluster-admin
+    users:
+    - system:admin
+    - jtk
+    - BOB
+    - system:serviceaccount:openshift:test-provision
+    groups:
+    - system:cluster-admins
+    - system:masters
+    remove_unlisted: true
+
+  projects:
+  - name: openshift
+    resources:
+    - "{{ lookup('file', inventory_dir ~ '/provision/files/jenkins-slave-base-rhel7.imagestream.yml') | from_yaml }}"
+    - "{{ lookup('file', inventory_dir ~ '/provision/files/jenkins-agent-openshift-provision.imagestream.yml') | from_yaml }}"
+    role_bindings:
+    - role: system:image-builder
+      users:
+      - system:serviceaccount:image-build:builder
+    service_accounts:
+    - test-provision
+
+  - name: image-build
+    resources:
+    - "{{ lookup('file', inventory_dir ~ '/provision/files/jenkins-agent-openshift-provision.buildconfig.yml') | from_yaml }}"
+
+  - name: jenkins
+    node_selector: region=app
+    service_accounts:
+    - jenkins
+    role_bindings:
+    - role: edit
+      users:
+      - system:serviceaccount:jenkins:jenkins
+
+  - name: provision-test
+    node_selector: region=app
+    service_accounts:
+    - jenkins
+    role_bindings:
+    - role: edit
+      users:
+      - system:serviceaccount:provision-test:jenkins
+
+  - name: test
+    node_selector: region=app
+    service_accounts:
+    - jenkins
+    role_bindings:
+    - role: edit
+      users:
+      - system:serviceaccount:test:jenkins

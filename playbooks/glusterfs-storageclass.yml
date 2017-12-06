@@ -1,0 +1,31 @@
+- hosts: masters[0]
+  vars:
+    glusterfs_storageclass:
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        annotations:
+          storageclass.beta.kubernetes.io/is-default-class: "true"
+        creationTimestamp: null
+        name: glusterfs-storage
+      parameters:
+        resturl: http://heketi-storage.glusterfs.svc.cluster.local:8080
+        restuser: admin
+        secretName: heketi-storage-admin-secret
+        secretNamespace: glusterfs
+      provisioner: kubernetes.io/glusterfs
+  tasks:
+  - name: Get glusterfs-storage storageclass
+    command: oc export storageclass glusterfs-storage
+    register: get_storageclass
+    changed_when: false
+
+  - when: glusterfs_storageclass != get_storageclass.stdout | from_yaml
+    block:
+    - name: Delete glusterfs-storage storageclass
+      command: oc delete storageclass glusterfs-storage
+
+    - name: Recreate glusterfs-storage storageclass
+      shell: >-
+        echo {{ glusterfs_storageclass | to_json | quote }} |
+        oc create -f -
