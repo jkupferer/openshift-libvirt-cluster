@@ -2,6 +2,6 @@
   roles:
   # Provision cluster base configuration
   - role: openshift-provision
-    openshift_resource_definition: "{{ playbook_dir }}/../provision/base.yml"
+    openshift_resource_definition: "{{ playbook_dir }}/provision/base.yml"
 
 

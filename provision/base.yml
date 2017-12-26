@@ -14,8 +14,8 @@ openshift_clusters:
   projects:
   - name: openshift
     resources:
-    - "{{ lookup('file', playbook_dir ~ '/../provision/files/jenkins-slave-base-rhel7.imagestream.yml') | from_yaml }}"
-    - "{{ lookup('file', playbook_dir ~ '/../provision/files/jenkins-agent-openshift-provision.imagestream.yml') | from_yaml }}"
+    - "{{ lookup('file', playbook_dir ~ '/provision/files/jenkins-slave-base-rhel7.imagestream.yml') | from_yaml }}"
+    - "{{ lookup('file', playbook_dir ~ '/provision/files/jenkins-agent-openshift-provision.imagestream.yml') | from_yaml }}"
     role_bindings:
     - role: system:image-builder
       users:
@@ -25,7 +25,7 @@ openshift_clusters:
 
   - name: image-build
     resources:
-    - "{{ lookup('file', playbook_dir ~ '/../provision/files/jenkins-agent-openshift-provision.buildconfig.yml') | from_yaml }}"
+    - "{{ lookup('file', playbook_dir ~ '/provision/files/jenkins-agent-openshift-provision.buildconfig.yml') | from_yaml }}"
 
   - name: jenkins
     node_selector: region=app

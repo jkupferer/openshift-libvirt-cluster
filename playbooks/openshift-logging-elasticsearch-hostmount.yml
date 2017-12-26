@@ -1,3 +1,0 @@
-- hosts: masters[0]
-  roles:
-  - role: openshift-logging-elasticsearch-hostmount
